@@ -26,13 +26,6 @@ describe 'User Stories' do
       oystercard.top_up(maxmimum_balance)
       expect { oystercard.top_up(1) }.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
     end
-
-    # In order to pay for my journey
-    # As a customer
-    # I need my fare deducted from my card
-    it "can be deducted" do 
-      expect { oystercard.deduct(5) }.to change{oystercard.balance}.by(-5)
-    end
   end
 
   describe "while travelling" do
@@ -44,10 +37,13 @@ describe 'User Stories' do
       expect{oystercard.touch_in}.to change(oystercard, :in_journey?).to(true)
     end
 
-    it "touching out ends the journey" do
+    # In order to pay for my journey
+    # As a customer
+    # When my journey is complete, I need the correct amount deducted from my card
+    it "touching out deducts from the balance" do
       oystercard.top_up(minimum_balance)
       oystercard.touch_in
-      expect{oystercard.touch_out}.to change(oystercard, :in_journey?).to(false)
+      expect{oystercard.touch_out}.to change(oystercard, :balance).by(-(minimum_balance))
     end
   end
 

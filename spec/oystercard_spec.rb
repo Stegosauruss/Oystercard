@@ -21,12 +21,6 @@ describe Oystercard do
 
   end
 
-  describe "#deduct" do
-    it "can be deducted" do 
-      expect { oystercard.deduct(5) }.to change{oystercard.balance}.by(-5)
-    end
-  end
-
   describe "#touch_in" do
   
     context "when balance is below minimum charge" do 
@@ -35,15 +29,25 @@ describe Oystercard do
       end
     end
 
-    it "can touch in" do
+    it "doesn't raise an error" do
       oystercard.top_up(minimum_balance)
       expect{oystercard.touch_in}.not_to raise_error
     end
+  end
 
-    it "can touch out" do
+  describe "#touch_out" do
+    it "changes in_journey to false" do
+      oystercard.top_up(minimum_balance)
+      oystercard.touch_in
+      expect{ oystercard.touch_out }.to change(oystercard, :in_journey?).to(false)
+    end
+
+    it "doesn't raise an error" do
       expect{oystercard.touch_out}.not_to raise_error
     end
 
-    
+    it "deducts minimum fare from balance" do
+      expect{oystercard.touch_out}.to change(oystercard, :balance).by(-(minimum_balance))
+    end
   end
 end
