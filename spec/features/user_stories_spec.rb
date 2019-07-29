@@ -9,11 +9,11 @@ describe 'User Stories' do
     expect(oystercard.balance).not_to eq nil
   end
 
-  describe "#top_up" do
+  describe "oystercard balances" do
     # In order to keep using public transport
     # As a customer
     # I want to add money to my card
-    it "increases balance" do 
+    it "can increase" do 
       expect { oystercard.top_up(5) }.to change{oystercard.balance}.by(5)
     end
 
@@ -25,8 +25,12 @@ describe 'User Stories' do
       oystercard.top_up(maxmimum_balance)
       expect { oystercard.top_up(1)}.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
     end
+
+    # In order to pay for my journey
+    # As a customer
+    # I need my fare deducted from my card
+    it "can be deducted" do 
+      expect { oystercard.deduct(5) }.to change{oystercard.balance}.by(-5)
+    end
   end
 end
-
-
-
