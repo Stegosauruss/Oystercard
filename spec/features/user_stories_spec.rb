@@ -1,6 +1,8 @@
 require 'oystercard'
 describe 'User Stories' do
   let(:oystercard) { Oystercard.new }
+  let(:minimum_balance) { Oystercard::MINIMUM_BALANCE }
+  let(:maxmimum_balance) { Oystercard::MAXIMUM_BALANCE }
 
   # In order to use public transport
   # As a customer
@@ -21,9 +23,8 @@ describe 'User Stories' do
     # As a customer
     # I want a maximum limit (of £90) on my card
     it "cannot surpass maximum limit" do
-      maxmimum_balance = Oystercard::MAXIMUM_BALANCE 
       oystercard.top_up(maxmimum_balance)
-      expect { oystercard.top_up(1)}.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
+      expect { oystercard.top_up(1) }.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
     end
 
     # In order to pay for my journey
@@ -39,10 +40,12 @@ describe 'User Stories' do
     # As a customer
     # I need to touch in and out.
     it "touching in starts a journey" do
+      oystercard.top_up(minimum_balance)
       expect{oystercard.touch_in}.to change(oystercard, :in_journey?).to(true)
     end
 
     it "touching out ends the journey" do
+      oystercard.top_up(minimum_balance)
       oystercard.touch_in
       expect{oystercard.touch_out}.to change(oystercard, :in_journey?).to(false)
     end
