@@ -25,4 +25,14 @@ describe Oystercard do
       expect { oystercard.deduct(5) }.to change{oystercard.balance}.by(-5)
     end
   end
+
+  describe "#touch_in" do
+    it "can touch in" do
+      expect{oystercard.touch_in}.not_to raise_error
+    end
+
+    it "can touch out" do
+      expect{oystercard.touch_out}.not_to raise_error
+    end
+  end
 end

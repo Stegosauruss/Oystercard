@@ -33,4 +33,19 @@ describe 'User Stories' do
       expect { oystercard.deduct(5) }.to change{oystercard.balance}.by(-5)
     end
   end
+
+  describe "while travelling" do
+    # In order to get through the barriers.
+    # As a customer
+    # I need to touch in and out.
+    it "touching in starts a journey" do
+      expect{oystercard.touch_in}.to change(oystercard, :in_journey?).to(true)
+    end
+
+    it "touching out ends the journey" do
+      oystercard.touch_in
+      expect{oystercard.touch_out}.to change(oystercard, :in_journey?).to(false)
+    end
+  end
+
 end
