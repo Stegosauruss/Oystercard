@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'station'
+
 class Oystercard
   attr_reader :balance, :entry_station
   attr_accessor :journey_log, :current_journey
@@ -10,7 +12,7 @@ class Oystercard
   def initialize
     @balance = 0
     @current_journey = {
-      :entry_station => nil, 
+      :entry_station => nil,
       :exit_station => nil
     }
     @journey_log = []
@@ -58,8 +60,8 @@ class Oystercard
     wipe_journey
   end
 
-  def log_touch_in(touch)
-    @current_journey[:entry_station] = touch
+  def log_touch_in(entry_station)
+    @current_journey[:entry_station] = entry_station
   end
 
   def log_touch_out(touch)

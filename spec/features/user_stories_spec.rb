@@ -5,8 +5,8 @@ describe 'User Stories' do
   let(:oystercard) { Oystercard.new }
   let(:minimum_balance) { Oystercard::MINIMUM_BALANCE }
   let(:maxmimum_balance) { Oystercard::MAXIMUM_BALANCE }
-  let(:station_double) { :entry_station }
-  let(:exit_station_double) { :entry_station }
+  let(:station_double) { :station }
+  let(:exit_station_double) { :station }
 
   # In order to use public transport
   # As a customer
@@ -52,9 +52,14 @@ describe 'User Stories' do
       oystercard.touch_in(station_double)
       expect { oystercard.touch_out(exit_station_double) }.to change(oystercard, :balance).by(-minimum_balance)
     end
+
+    # In order to know how far I have travelled
+    # As a customer
+    # I want to know what zone a station is in
+
   end
 
-  describe 'while storing journeys' do
+  describe 'after journeys' do
     let(:journey) { {entry_station: station_double, exit_station: exit_station_double} }
     # In order to pay for my journey
     # As a customer
@@ -64,11 +69,27 @@ describe 'User Stories' do
     # As a customer
     # I want to see all my previous trips
   
-    it 'journeys are logged' do 
+    it 'past trips are logged' do
       oystercard.top_up(minimum_balance)
       oystercard.touch_in(station_double)
       oystercard.touch_out(exit_station_double)
       expect(oystercard.journey_log).to include journey
     end
   end
+
+  describe 'a full journey' do 
+    xit 'logs a journey with zone information' do
+      card = Oystercard.new
+      card.top_up(10)
+      west_ham = Station.new("West Ham", 2)
+      london_bridge = Station.new("London Bridge", 1)
+
+      card.touch_in(west_ham)
+      card.touch_out(london_bridge)
+      expect(card.journey_log).to eq [{ :entry_station => "West Ham" , :exit_station => "London Bridge" }]
+
+    end
+  end
+
+
 end

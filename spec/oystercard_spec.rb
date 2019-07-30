@@ -20,22 +20,24 @@ describe Oystercard do
 
     it 'cannot surpass maximum limit' do
       oystercard.top_up(maxmimum_balance)
-      message = "Cannot top_up: max limit is #{maxmimum_balance}"
-      expect { oystercard.top_up(1) }.to raise_error message
+      expect { oystercard.top_up(1) }.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
     end
   end
 
   describe '#touch_in' do
     context 'when balance is below minimum charge' do
       it 'raises an error' do
-        expect { oystercard.touch_in(station_double) }.to raise_error 'Cannot touch in: insufficient balance'
+        message = 'Cannot touch in: insufficient balance'
+        expect { oystercard.touch_in(station_double) }.to raise_error message
       end
     end
 
-    it "doesn't raise an error" do
-      oystercard.top_up(minimum_balance)
-      oystercard.touch_in(station_double)
-      expect { oystercard.touch_in }.to raise_error
+    context 'touching in twice' do
+      it "raises an error" do
+        oystercard.top_up(minimum_balance)
+        oystercard.touch_in(station_double)
+        expect { oystercard.touch_in(station_double) }.to raise_error 'Cannot touch in: journey has begun'
+      end
     end
   end
 
