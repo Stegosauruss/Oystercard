@@ -24,16 +24,16 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in(entry_station)
+  def touch_in(current_station)
     raise 'Cannot touch in: insufficient balance' if insufficient_balance?
     raise 'Cannot touch in: journey has begun' if in_journey?
 
-    log_touch_in(entry_station)
+    log_touch_in(current_station)
   end
 
-  def touch_out(exit_station)
+  def touch_out(current_station)
     deduct(MINIMUM_BALANCE)
-    log_touch_out(exit_station)
+    log_touch_out(current_station)
     log_journey
   end
 
@@ -60,12 +60,12 @@ class Oystercard
     wipe_journey
   end
 
-  def log_touch_in(entry_station)
-    @current_journey[:entry_station] = entry_station
+  def log_touch_in(current_station)
+    @current_journey[:entry_station] = current_station.name
   end
 
-  def log_touch_out(touch)
-    @current_journey[:exit_station] = touch
+  def log_touch_out(current_station)
+    @current_journey[:exit_station] = current_station.name
   end
 
   def wipe_journey

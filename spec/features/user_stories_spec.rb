@@ -40,6 +40,7 @@ describe 'User Stories' do
     # As a customer
     # I need to touch in and out.
     it 'touching in starts a journey' do
+      station_double = double(:station, name: "West Ham")
       oystercard.top_up(minimum_balance)
       expect { oystercard.touch_in(station_double) }.to change(oystercard, :in_journey?).to(true)
     end
@@ -48,6 +49,8 @@ describe 'User Stories' do
     # As a customer
     # When my journey is complete, I need the correct amount deducted from my card
     it 'touching out deducts from the balance' do
+      station_double = double(:station, name: "West Ham")
+      exit_station_double = double(:station, name: "London Bridge")
       oystercard.top_up(minimum_balance)
       oystercard.touch_in(station_double)
       expect { oystercard.touch_out(exit_station_double) }.to change(oystercard, :balance).by(-minimum_balance)
@@ -60,7 +63,7 @@ describe 'User Stories' do
   end
 
   describe 'after journeys' do
-    let(:journey) { {entry_station: station_double, exit_station: exit_station_double} }
+    let(:journey) { {entry_station: "West Ham", exit_station: "London Bridge"} }
     # In order to pay for my journey
     # As a customer
     # I need to know where I've travelled from
@@ -70,6 +73,8 @@ describe 'User Stories' do
     # I want to see all my previous trips
   
     it 'past trips are logged' do
+      station_double = double(:station, name: "West Ham")
+      exit_station_double = double(:station, name: "London Bridge")
       oystercard.top_up(minimum_balance)
       oystercard.touch_in(station_double)
       oystercard.touch_out(exit_station_double)
@@ -78,7 +83,7 @@ describe 'User Stories' do
   end
 
   describe 'a full journey' do 
-    xit 'logs a journey with zone information' do
+    it 'logs a journey with zone information' do
       card = Oystercard.new
       card.top_up(10)
       west_ham = Station.new("West Ham", 2)
