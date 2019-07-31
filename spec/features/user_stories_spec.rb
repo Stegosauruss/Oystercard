@@ -27,7 +27,8 @@ describe 'User Stories' do
     # I want a maximum limit (of 90) on my card
     it 'cannot surpass maximum limit' do
       oystercard.top_up(maxmimum_balance)
-      expect { oystercard.top_up(1) }.to raise_error "Cannot top_up: max limit is #{maxmimum_balance}"
+      message = "Cannot top_up: max limit is #{maxmimum_balance}"
+      expect { oystercard.top_up(1) }.to raise_error message
     end
   end
 

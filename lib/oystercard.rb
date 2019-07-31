@@ -20,6 +20,7 @@ class Oystercard
   def touch_in
     raise 'Cannot touch in: insufficient balance' unless sufficient_balance?
 
+
     @in_journey = true
   end
 
@@ -38,8 +39,8 @@ class Oystercard
     @in_journey
   end
 
-  def sufficient_balance?
-    @balance >= MINIMUM_BALANCE
+  def insufficient_balance?
+    @balance < MINIMUM_BALANCE
   end
 
   def deduct(amount)
