@@ -31,6 +31,11 @@ describe Oystercard do
       oystercard.top_up(minimum_balance)
       expect { oystercard.touch_in }.not_to raise_error
     end
+
+    it "stores entry station" do
+      oystercard.touch_in("Stratford")
+      expect(oystercard, :entry_station).to eq ("Stratford")
+    end
   end
 
   describe '#touch_out' do
