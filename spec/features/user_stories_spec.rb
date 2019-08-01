@@ -5,7 +5,8 @@ describe 'User Stories' do
   let(:oystercard) { Oystercard.new }
   let(:minimum_balance) { Oystercard::MINIMUM_BALANCE }
   let(:maxmimum_balance) { Oystercard::MAXIMUM_BALANCE }
-  let(:station) { Station.new("West Ham", 2) }
+  let(:station) { Station.new('London Bridge', 1) }
+  let(:station_two) { Station.new('West Ham', 2) }
 
   # In order to use public transport
   # As a customer
@@ -58,9 +59,12 @@ describe 'User Stories' do
     # As a customer
     # I want to know what zone a station is in
 
-    pending 'zones have an effect'
+    it 'zones have an effect' do
+      oystercard.top_up(minimum_balance)
+      oystercard.touch_in(station)
+      expect { oystercard.touch_out(station_two) }.to change(oystercard, :balance).by(-2)
+    end
   end
-
 
   # In order to pay for my journey
   # As a customer
@@ -76,6 +80,4 @@ describe 'User Stories' do
     oystercard.touch_out(station)
     expect(oystercard.past_journeys[0].entry_station).to eq station
   end
-
-
 end

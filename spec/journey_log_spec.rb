@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'journey_log'
 describe JourneyLog do
   let(:journey_double) { double(:journey, fare: true, exit_station: true) }

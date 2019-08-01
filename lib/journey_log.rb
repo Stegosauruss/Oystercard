@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'journey'
 class JourneyLog
-  attr_reader :journeys, :current_journey
+  attr_reader :current_journey
   def initialize(journey_class = Journey)
     @journey_class = journey_class
     @journeys = []
@@ -22,10 +24,14 @@ class JourneyLog
     charge
   end
 
+  def journeys
+    @journeys.dup
+  end
+
   private
 
   def end_journey
-    if @current_journey == nil
+    if @current_journey.nil?
       @current_journey = @journey_class.new
     else
       @current_journey

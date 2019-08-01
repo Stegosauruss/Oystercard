@@ -1,9 +1,10 @@
-class Journey
+# frozen_string_literal: true
 
+class Journey
   attr_reader :entry_station
   PENALTY_FARE = 6
 
-  #should only take one arg
+  # should only take one arg
   def initialize(entry_station = nil)
     @entry_station = entry_station
     @exit_station = nil
@@ -11,9 +12,9 @@ class Journey
 
   def fare
     if complete?
-      return 1
+      calculate_fare
     else
-      return PENALTY_FARE
+      PENALTY_FARE
     end
   end
 
@@ -24,6 +25,10 @@ class Journey
   private
 
   def complete?
-  (@entry_station && @exit_station) ? true : false
+    @entry_station && @exit_station ? true : false
+  end
+
+  def calculate_fare
+    1 + (@entry_station.zone - @exit_station.zone).abs
   end
 end

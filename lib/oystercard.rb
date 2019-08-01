@@ -24,17 +24,15 @@ class Oystercard
   def touch_in(entry_station)
     raise 'Cannot touch in: insufficient balance' if insufficient_balance?
 
-    if @journey_log.current_journey == nil
+    if @journey_log.current_journey.nil?
       @journey_log.start(entry_station)
-    else  
+    else
       @journey_log.finish(nil)
       deduct(@journey_log.outstanding_charge)
     end
-    
   end
 
   def touch_out(exit_station)
-
     @journey_log.finish(exit_station)
     deduct(@journey_log.outstanding_charge)
   end
@@ -56,5 +54,4 @@ class Oystercard
   def deduct(amount)
     @balance -= amount
   end
-
 end
