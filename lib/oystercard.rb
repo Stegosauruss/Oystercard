@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
 require_relative 'station'
-require_relative 'journey'
+require_relative 'journey_log'
 
 class Oystercard
   attr_reader :balance, :journey
-  attr_accessor :journey_log
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
 
-  def initialize(journey_class = Journey)
-    @journey_log = []
+  def initialize(journey_log = JourneyLog.new)
+    @journey_log = journey_log
     @entry_station = nil
     @balance = 0
-    @journey_class = journey_class
   end
 
   def top_up(amount)
@@ -23,20 +21,26 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in(current_station)
+  def touch_in(entry_station)
     raise 'Cannot touch in: insufficient balance' if insufficient_balance?
-      
-    complete_journey(nil) if in_journey?
-    @entry_station = current_station
 
-    #check journey_log.current_journey poss fare/add to log
-    #create journey otherwise
+    if @journey_log.current_journey == nil
+      @journey_log.start(entry_station)
+    else  
+      @journey_log.finish(nil)
+      deduct(@journey_log.outstanding_charge)
+    end
+    
   end
 
   def touch_out(exit_station)
-    complete_journey(exit_station)
-    #run finish
-    #add to fare/log
+
+    @journey_log.finish(exit_station)
+    deduct(@journey_log.outstanding_charge)
+  end
+
+  def past_journeys
+    @journey_log.journeys
   end
 
   private

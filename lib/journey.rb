@@ -5,16 +5,16 @@ class Journey
   PENALTY_FARE = 6
 
   #should only take one arg
-  def initialize(entry_station, exit_station)
+  def initialize(entry_station = nil)
     @entry_station = entry_station
-    @exit_station = exit_station
+    @exit_station = nil
   end
 
   def fare
     if complete?
       return 1
     else
-      return 6
+      return PENALTY_FARE
     end
   end
 
