@@ -7,12 +7,13 @@ describe Journey do
   describe '#fare' do
     it 'charges 1 with a full journey' do
       journey = described_class.new(station_double)
-      allow(journey).to receive(:exit_station).and_return(station_double)
+      journey.add_exit(station_double)
       expect(journey.fare).to eq 1
     end
 
     it 'charges 6 with no entry station' do
       journey = described_class.new
+      journey.add_exit(station_double)
       expect(journey.fare).to eq penalty_fare
     end
 

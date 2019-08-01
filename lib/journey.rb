@@ -1,7 +1,6 @@
 class Journey
 
   attr_reader :entry_station
-  attr_accessor :exit_station
   PENALTY_FARE = 6
 
   #should only take one arg
@@ -18,7 +17,11 @@ class Journey
     end
   end
 
+  def add_exit(station)
+    @exit_station = station
+  end
+
   def complete?
-  (entry_station && exit_station) ? true : false
+  (@entry_station && @exit_station) ? true : false
   end
 end

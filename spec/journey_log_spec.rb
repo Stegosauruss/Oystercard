@@ -22,7 +22,11 @@ describe JourneyLog do
   end
 
   describe 'finish' do
-    pending 'ends a journey'
+    it 'ends a journey' do
+      allow(journey_class_double).to receive(:new).and_return(journey_double)
+      expect(journey_double).to receive(:add_exit).with(station_double)
+      journey_log.finish(station_double)
+    end
   end
 end
 

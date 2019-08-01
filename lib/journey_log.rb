@@ -13,7 +13,7 @@ class JourneyLog
 
   def finish(exit_station)
     end_journey
-    @current_journey.exit_station = exit_station
+    @current_journey.add_exit(exit_station)
   end
 
   def outstanding_charge
