@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
 require_relative 'station'
+require_relative 'journey'
 
 class Oystercard
-  attr_reader :balance, :journey, :entry_station
-  attr_accessor :journey_log, :current_journey, :in_journey
+  attr_reader :balance, :journey
+  attr_accessor :journey_log
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
 
-  def initialize
-    @journey = Journey.new
-    @in_journey = false
+  def initialize(journey_class = Journey)
+    @journey_log = []
+    @entry_station = nil
     @balance = 0
+    @journey_class = journey_class
   end
 
   def top_up(amount)
@@ -23,16 +25,18 @@ class Oystercard
 
   def touch_in(current_station)
     raise 'Cannot touch in: insufficient balance' if insufficient_balance?
-    raise 'Cannot touch in: journey has begun' if in_journey?
-    @in_journey = true
-    log_touch_in(current_station)
+      
+    complete_journey(nil) if in_journey?
+    @entry_station = current_station
+
+    #check journey_log.current_journey poss fare/add to log
+    #create journey otherwise
   end
 
-  def touch_out(current_station)
-    deduct(MINIMUM_BALANCE)
-    @in_journey = false
-    log_touch_out(current_station)
-    log_journey
+  def touch_out(exit_station)
+    complete_journey(exit_station)
+    #run finish
+    #add to fare/log
   end
 
   private
@@ -42,7 +46,7 @@ class Oystercard
   end
 
   def in_journey?
-    !@journey.current_journey[:entry_station].nil?
+    @entry_station != nil
   end
 
   def insufficient_balance?
@@ -53,19 +57,10 @@ class Oystercard
     @balance -= amount
   end
 
-  def log_journey
-    @journey.journey_log << @journey.current_journey
-    @current_journey = {
-      :entry_station => nil,
-      :exit_station => nil
-    }
-  end
-
-  def log_touch_in(current_station)
-    @journey.current_journey[:entry_station] = current_station.name
-  end
-
-  def log_touch_out(current_station)
-    @journey.current_journey[:exit_station] = current_station.name
+  def complete_journey(exit_station)
+    journey = @journey_class.new(@entry_station, exit_station)
+    @journey_log << journey
+    deduct(journey.fare)
+    @entry_station = nil
   end
 end

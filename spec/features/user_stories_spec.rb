@@ -72,18 +72,7 @@ describe 'User Stories' do
     # As a customer
     # I want to see all my previous trips
 
-    it 'past trips are logged' do
-      station_double = double(:station, name: "West Ham")
-      exit_station_double = double(:station, name: "London Bridge")
-      oystercard.top_up(minimum_balance)
-      oystercard.touch_in(station_double)
-      oystercard.touch_out(exit_station_double)
-      expect(oystercard.journey.journey_log).to include journey
-    end
-  end
-
-  describe 'a full journey' do
-    it 'logs a journey with zone information' do
+    it 'journey log is updated' do
       card = Oystercard.new
       card.top_up(10)
       west_ham = Station.new("West Ham", 2)
@@ -91,10 +80,10 @@ describe 'User Stories' do
 
       card.touch_in(west_ham)
       card.touch_out(london_bridge)
-      expect(card.journey.journey_log).to eq [{ :entry_station => "West Ham" , :exit_station => "London Bridge" }]
-
+      expect(card.journey_log[0].entry_station).to eq west_ham
     end
+
+    #deduct 6 if incomplete
+
   end
-
-
 end

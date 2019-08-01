@@ -1,12 +1,24 @@
 class Journey
 
-  attr_accessor :current_journey, :journey_log
+  attr_reader :entry_station
+  attr_accessor :exit_station
+  PENALTY_FARE = 6
 
-  def initialize
-    @current_journey = {
-      :entry_station => nil,
-      :exit_station => nil
-    }
-    @journey_log = []
+  #should only take one arg
+  def initialize(entry_station, exit_station)
+    @entry_station = entry_station
+    @exit_station = exit_station
+  end
+
+  def fare
+    if complete?
+      return 1
+    else
+      return 6
+    end
+  end
+
+  def complete?
+  (entry_station && exit_station) ? true : false
   end
 end
