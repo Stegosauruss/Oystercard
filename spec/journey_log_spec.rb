@@ -29,16 +29,3 @@ describe JourneyLog do
     end
   end
 end
-
-
-
-# it 'journey log is updated' do
-#   card = Oystercard.new
-#   card.top_up(10)
-#   west_ham = Station.new("West Ham", 2)
-#   london_bridge = Station.new("London Bridge", 1)
-
-#   card.touch_in(west_ham)
-#   card.touch_out(london_bridge)
-#   expect().to eq west_ham
-# end

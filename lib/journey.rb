@@ -21,6 +21,8 @@ class Journey
     @exit_station = station
   end
 
+  private
+
   def complete?
   (@entry_station && @exit_station) ? true : false
   end

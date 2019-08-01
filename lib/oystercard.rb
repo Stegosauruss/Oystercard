@@ -49,10 +49,6 @@ class Oystercard
     @balance + amount > MAXIMUM_BALANCE
   end
 
-  def in_journey?
-    @entry_station != nil
-  end
-
   def insufficient_balance?
     @balance < MINIMUM_BALANCE
   end
@@ -61,10 +57,4 @@ class Oystercard
     @balance -= amount
   end
 
-  def complete_journey(exit_station)
-    journey = @journey_class.new(@entry_station, exit_station)
-    @journey_log << journey
-    deduct(journey.fare)
-    @entry_station = nil
-  end
 end
